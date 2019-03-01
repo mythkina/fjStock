@@ -1,16 +1,5 @@
 const axios = require('axios')
 
-async function getUser() {
-  const res = await axios.get('http://fund.eastmoney.com//Data/Fund_JJJZ_Data.aspx?t=1&lx=9&letter=&gsid=0&text=&sort=zdf,desc&page=1,10000000&dt=1425897162484&atfc=');
-
-  console.log("-----", res)
-  const response = await res.data;
-  return response;
-}
-
-
- getUser();
-
 
 
 
@@ -100,10 +89,31 @@ async function getUser() {
   // const priceRes = await stockPrice.text();
 
   // const priceRes = 'var hq_str_sz150019="银华锐进,0.794,0.796,0.795,0.809,0.784,0.794,0.795,210438793,167319867.872,723700,0.794,320500,0.793,362100,0.792,178700,0.791,578500,0.790,600064,0.795,1085337,0.796,306700,0.797,914800,0.798,1674200,0.799,2019-02-28,13:33:39,00";var hq_str_sh150018="";'
-  // key = "150018";
-  // var myRegexp = /(?:^|\s)`key`(.*?)(?:\s|$)/g;
-  // var match = myRegexp.exec(priceRes);
-  // console.log(match[1]); // abc
+  //   key = "150019";
+  //   var regex = new RegExp(key + "=\"(.*?)\";");
+  //   var match = regex.exec(priceRes);
+  //   console.log("value ", match[1]); // abc
   // }
 
-  // aaa();
+  // const pp = aaa();
+  // console.log("call", pp)
+
+  let target = [ '150262', '162412', '150261' ]
+  let sorted = target.sort((x,y) => x-y);
+  console.log(sorted);
+
+// var arr = new Array(6)
+// arr[0] = "10"
+// arr[1] = "5"
+// arr[2] = "40"
+// arr[3] = "25"
+// arr[4] = "1000"
+// arr[5] = "1"
+
+// arr = [ '150262', '162412', '150261' ]
+// function sortNumber(a,b)
+// {
+// return a - b
+// }
+
+// console.log(arr.sort(sortNumber))
