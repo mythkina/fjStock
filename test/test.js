@@ -1,5 +1,40 @@
 const axios = require('axios')
 
+async function b(){
+  var p1 = await new Promise(function(resolve){
+    var now = new Date;
+    var exitTime = now.getTime() + 1000;
+    while (true) {
+      now = new Date();
+      if (now.getTime() > exitTime) {
+        break
+      }
+    }
+    console.log('sleep ' + 1000);
+    resolve('1111')
+    return "111";
+  })  
+
+  console.log("response data", p1)
+  // p1.then( result => {
+  //   console.log("response", result);
+  // })
+
+  console.log("blocked!!!!")
+
+  return 1;
+}
+
+async function c(){
+  let datas = await b();
+
+  console.log(" blocked!!!!  aaaaa", datas)
+}
+
+(function(){
+  c();
+}());
+console.log("not blocker!!!!")
 
 
 
@@ -98,9 +133,9 @@ const axios = require('axios')
   // const pp = aaa();
   // console.log("call", pp)
 
-  let target = [ '150262', '162412', '150261' ]
-  let sorted = target.sort((x,y) => x-y);
-  console.log(sorted);
+  // let target = [ '150262', '162412', '150261' ]
+  // let sorted = target.sort((x,y) => x-y);
+  // console.log(sorted);
 
 // var arr = new Array(6)
 // arr[0] = "10"
@@ -117,3 +152,84 @@ const axios = require('axios')
 // }
 
 // console.log(arr.sort(sortNumber))
+
+// var o = {
+//   valueOf : () => {console.log("valueOf"); return {}},
+//   toString : () => {console.log("toString"); return {}}
+// }
+
+// o[Symbol.toPrimitive] = () => {console.log("toPrimitive"); return "hello"}
+
+
+// console.log(o + "")
+// // toPrimitive
+// // hello
+// console.log("new Date", new Date); // 1
+// console.log("date", Date())
+
+// var set = new Set();
+// var objects = [
+//     eval,
+//     isFinite,
+//     isNaN,
+//     parseFloat,
+//     parseInt,
+//     decodeURI,
+//     decodeURIComponent,
+//     encodeURI,
+//     encodeURIComponent,
+//     Array,
+//     Date,
+//     RegExp,
+//     Promise,
+//     Proxy,
+//     Map,
+//     WeakMap,
+//     Set,
+//     WeakSet,
+//     Function,
+//     Boolean,
+//     String,
+//     Number,
+//     Symbol,
+//     Object,
+//     Error,
+//     EvalError,
+//     RangeError,
+//     ReferenceError,
+//     SyntaxError,
+//     TypeError,
+//     URIError,
+//     ArrayBuffer,
+//     SharedArrayBuffer,
+//     DataView,
+//     Float32Array,
+//     Float64Array,
+//     Int8Array,
+//     Int16Array,
+//     Int32Array,
+//     Uint8Array,
+//     Uint16Array,
+//     Uint32Array,
+//     Uint8ClampedArray,
+//     Atomics,
+//     JSON,
+//     Math,
+//     Reflect];
+// objects.forEach(o => set.add(o));
+
+// for(var i = 0; i < objects.length; i++) {
+//     var o = objects[i]
+//     for(var p of Object.getOwnPropertyNames(o)) {
+//         var d = Object.getOwnPropertyDescriptor(o, p)
+//         if( (d.value !== null && typeof d.value === "object") || (typeof d.value === "function"))
+//             if(!set.has(d.value))
+//                 set.add(d.value), objects.push(d.value);
+//         if( d.get )
+//             if(!set.has(d.get))
+//                 set.add(d.get), objects.push(d.get);
+//         if( d.set )
+//             if(!set.has(d.set))
+//                 set.add(d.set), objects.push(d.set);
+//     }
+// }
