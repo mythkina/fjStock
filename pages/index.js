@@ -21,19 +21,19 @@ export default class Index extends React.Component {
               <div className="flex-container">
                 <div className="flex-item">{show.id}</div>
                 <div className="flex-item">{show.name}</div>
-                <div className="flex-item">{show.currentPrice}万</div>
-                <div className={show.upperPercent > 0 ? "flex-item text-red": show.upperPercent == 0 ? "flex-item" : "flex-item text-green" }>{show.upperPercent}%</div>
+                <div className="flex-item">{show.currentPrice}</div>
+                <div className={show.upperPercent > 0 ? "flex-item text-red": show.upperPercent < 0 ? "flex-item text-green" : "flex-item" }>{show.upperPercent}{ typeof(show.upperPercent)=="number" ? "%" : ""}</div>
                 <div className="flex-item">{show.changeAmount}</div>
                 <div className="flex-item">{show.buy}</div>
                 <div className="flex-item">{show.sell}</div>
-                <div className="flex-item">{show.AcurrentPrice}</div>
+                <div className="flex-item">{show.AcurrentPrice}{typeof(show.AcurrentPrice)=="number" ? "%" : ""}</div>
                 <div className="flex-item">{show.ABuy}</div>
                 <div className="flex-item">{show.ASell}</div>
                 <div className="flex-item">{show.AChangeAmount}万</div>
-                <div className="flex-item">{show.AUpperPercent}%</div>
+                <div className={show.AUpperPercent > 0 ? "flex-item text-red": show.AUpperPercent < 0 ? "flex-item text-green" : "flex-item"}>{show.AUpperPercent}{typeof(show.AUpperPercent)=="number" ? "%" : ""}</div>
                 <div className="flex-item">{show.yesterdayPrice}</div>
-                <div className={show.zhishuUpperPrice > 0 ? "flex-item text-red": show.zhishuUpperPrice == 0 ? "flex-item" : "flex-item text-green" }>{show.zhishuUpperPrice}</div>
-                <div className={show.zheyiPrice > 0 ? "flex-item text-red": show.zheyiPrice == 0 ? "flex-item" : "flex-item text-green" }>{show.zheyiPrice}{show.zheyiPrice ? "%" : ""}</div>
+                <div className={show.zhishuUpperPrice > 0 ? "flex-item text-red": show.zhishuUpperPrice < 0 ? "flex-item text-green" : "flex-item"}>{show.zhishuUpperPrice}{typeof(show.zhishuUpperPrice)=="number" ? "%" : ""}</div>
+                <div className={show.zheyiPrice > 0 ? "flex-item text-red": show.zheyiPrice < 0 ? "flex-item text-green" : "flex-item" }>{show.zheyiPrice}{typeof(show.zheyiPrice)=="number" ? "%" : ""}</div>
                 <div className="flex-item">{show.abPercent}</div>
               </div>
             </li>
@@ -137,10 +137,10 @@ async function getUser() {
                 '150328'  : { a : '150327', z : '164821', ab : 5, code : 'sz399808'},
                 '502025'  : { a : '502024', z : '502023', ab : 5, code : 'sz399440'},
                 '150124'  : { a : '150123', z : '165312', ab : 5, code : 'sz399550'},
-                '150165'  : { a : '150164', z : '165809', ab : 7, code : 'sh000832'},
+                // '150165'  : { a : '150164', z : '165809', ab : 7, code : 'sh000832'},
                 '150288'  : { a : '150287', z : '168203', ab : 5, code : 'sz399440'},
-                '150144'  : { a : '150143', z : '161826', ab : 7, code : 'sh000832'},
-                '150033'  : { a : '150032', z : '160718', ab : 8, code : 'sh000923'},
+                // '150144'  : { a : '150143', z : '161826', ab : 7, code : 'sh000832'},
+                // '150033'  : { a : '150032', z : '160718', ab : 8, code : 'sh000923'},
                 '150067'  : { a : '150066', z : '160217', ab : 7, code : 'sz399481'},
                 '150274'  : { a : '150273', z : '160638', ab : 5, code : 'sz399991'},
                 '150276'  : { a : '150275', z : '167503', ab : 5, code : 'sz399991'},
@@ -149,7 +149,7 @@ async function getUser() {
                 '150218'  : { a : '150217', z : '164905', ab : 5, code : 'sz399412'},
                 '150101'  : { a : '150100', z : '160620', ab : 5, code : 'sh000805'},
                 '150266'  : { a : '150265', z : '168201', ab : 5, code : 'sz399991'},
-                '150189'  : { a : '150188', z : '161719', ab : 7, code : 'sh000832'},
+                // '150189'  : { a : '150188', z : '161719', ab : 7, code : 'sh000832'},
                 '150316'  : { a : '150315', z : '161031', ab : 5, code : 'sz399803'},
                 '150204'  : { a : '150203', z : '160629', ab : 5, code : 'sz399971'},
                 '150168'  : { a : '150167', z : '161811', ab : 5, code : 'sz399300'},
@@ -246,8 +246,8 @@ Index.getInitialProps = async function() {
 
   c['datas'].map((show) => {
     if (show[0] in mujiDic) {
-      let yes = show[3];
-      if (show[3] === "") {
+      let yes = show[5];
+      if (show[5] === "") {
         if (global && global.stock) {
           yes = global.stock[show[0]]
         }
@@ -259,7 +259,6 @@ Index.getInitialProps = async function() {
           global.stock[show[0]] = yes;
         }
       }
-
       ret[mujiDic[show[0]]].yesterdayPrice = yes;
       ret[mujiDic[show[0]]].name = show[1];
     }
@@ -300,9 +299,6 @@ Index.getInitialProps = async function() {
     ret[ADic[code]].ASell = stockInfoArray[21]
     ret[ADic[code]].AChangeAmount = parseFloat(parseInt(stockInfoArray[9] / 100) * 100 / 10000)
     ret[ADic[code]].AUpperPercent = parseInt((stockInfoArray[3]- stockInfoArray[2])/stockInfoArray[3] * 10000) / 100 
-    console.log('current', stockInfoArray[3])
-    console.log('yesterday', stockInfoArray[2])
-    console.log('code', ADic[code])
   }
 
   for (let code in zhishuDic) {
@@ -311,13 +307,19 @@ Index.getInitialProps = async function() {
     let stockInfoArray = match[1].split(",");
 
     zhishuDic[code].map( bCode => {
-      ret[bCode].zhishuUpperPrice = parseInt((stockInfoArray[3]- stockInfoArray[2])/stockInfoArray[3] * 10000) / 100 
+      ret[bCode].zhishuUpperPrice = parseInt((stockInfoArray[3]- stockInfoArray[2])/stockInfoArray[3] * 10000) / 100
       let jingzhi = ret[bCode].yesterdayPrice * (stockInfoArray[3] / stockInfoArray[2] * 0.995);
-  
-      
       let price = (ret[bCode].AcurrentPrice * codes[bCode].ab + ret[bCode].currentPrice * (10 - codes[bCode].ab)) / 10
-      ret[bCode].zheyiPrice = parseInt((price - jingzhi)/ jingzhi * 100) / 100
+      ret[bCode].zheyiPrice = parseInt((price - jingzhi)/ jingzhi * 10000) / 100
       ret[bCode].culPrice = jingzhi;
+      console.log('昨日', ret[bCode].yesterdayPrice)
+      console.log('指数今日', stockInfoArray[3])
+      console.log('指数昨日', stockInfoArray[2])
+      console.log('a类', ret[bCode].AcurrentPrice )
+      console.log('b类', ret[bCode].currentPrice )
+      console.log('比例', codes[bCode].ab )
+      console.log('代码', bCode)
+      
     });
 
 
@@ -337,7 +339,7 @@ Index.getInitialProps = async function() {
   }
 
   // stocks = stocks.sort((x,y) => x.zheyiPrice-y.zheyiPrice);
-  stocks = stocks.sort((x,y) => y.changeAmount-x.changeAmount);
+  stocks = stocks.sort((x,y) => y.zheyiPrice-x.zheyiPrice);
   return {
     shows: stocks,
     // group:_strMapToObj(group), 
