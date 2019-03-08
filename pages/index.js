@@ -20,7 +20,7 @@ export default class Index extends React.Component {
             <li key={show.id} >
               <div className="flex-container">
                 <div className="flex-item">{show.id}</div>
-                <div className="flex-item">{show.name}</div>
+                <div className="flex-item-2">{show.name}</div>
                 <div className="flex-item">{show.currentPrice}</div>
                 <div className={show.upperPercent > 0 ? "flex-item text-red": show.upperPercent < 0 ? "flex-item text-green" : "flex-item" }>{show.upperPercent}{ typeof(show.upperPercent)=="number" ? "%" : ""}</div>
                 <div className="flex-item">{show.changeAmount}</div>
@@ -29,7 +29,7 @@ export default class Index extends React.Component {
                 <div className="flex-item">{show.AcurrentPrice}{typeof(show.AcurrentPrice)=="number" ? "%" : ""}</div>
                 <div className="flex-item">{show.ABuy}</div>
                 <div className="flex-item">{show.ASell}</div>
-                <div className="flex-item">{show.AChangeAmount}万</div>
+                <div className="flex-item">{show.AChangeAmount}{ typeof(show.AChangeAmount)=="number" ? "万" : ""}</div>
                 <div className={show.AUpperPercent > 0 ? "flex-item text-red": show.AUpperPercent < 0 ? "flex-item text-green" : "flex-item"}>{show.AUpperPercent}{typeof(show.AUpperPercent)=="number" ? "%" : ""}</div>
                 <div className="flex-item">{show.yesterdayPrice}</div>
                 <div className={show.zhishuUpperPrice > 0 ? "flex-item text-red": show.zhishuUpperPrice < 0 ? "flex-item text-green" : "flex-item"}>{show.zhishuUpperPrice}{typeof(show.zhishuUpperPrice)=="number" ? "%" : ""}</div>
@@ -64,6 +64,9 @@ export default class Index extends React.Component {
      
           .flex-item {
             flex:1
+          }
+          .flex-item-2 {
+            flex:3
           }
           .text-red {
             color:red;
@@ -235,7 +238,7 @@ Index.getInitialProps = async function() {
 
   const c = strToJson(d);
   const ret = {}
-  ret[0] = ({id:"代码", name:"名称", currentPrice:"现价", buy:"买一", sell:"卖一", changeAmount:"成交金额", upperPercent:"涨幅", AcurrentPrice:"A类现价", ABuy:"A类买一", ASell:"A类卖一", AChangeAmount:"A类交易额", AUpperPercent:"A类涨幅",  culPrice:"母鸡估值",yesterdayPrice:"昨天净值",zhishuUpperPrice:"指数涨幅", zheyiPrice:"折溢价",abPercent:"ab份额比"})
+  ret[0] = ({id:"代码", name:"名称", currentPrice:"现价", buy:"买一", sell:"卖一", changeAmount:"成交金额", upperPercent:"涨幅", AcurrentPrice:"A类现价", ABuy:"A类买一", ASell:"A类卖一", AChangeAmount:"A交易额", AUpperPercent:"A类涨幅",  culPrice:"母鸡估值",yesterdayPrice:"昨天净值",zhishuUpperPrice:"指数涨幅", zheyiPrice:"折溢价",abPercent:"ab份额比"})
   c['datas'].map((show) => {
     if (show[0] in codes) {
       const dic = {};
@@ -330,6 +333,8 @@ Index.getInitialProps = async function() {
     stocks.push(ret[code])
   }
 
+
+
   function _strMapToObj(strMap){
     let obj= Object.create(null);
     for (let[k,v] of strMap) {
@@ -339,7 +344,11 @@ Index.getInitialProps = async function() {
   }
 
   // stocks = stocks.sort((x,y) => x.zheyiPrice-y.zheyiPrice);
-  stocks = stocks.sort((x,y) => y.zheyiPrice-x.zheyiPrice);
+  stocks = stocks.filter(x => {
+    if (typeof(x.changeAmount) !== "number") return true;
+    if (x.changeAmount > 10) return true;
+    return false;
+  }).sort((x,y) => y.zheyiPrice-x.zheyiPrice);
   return {
     shows: stocks,
     // group:_strMapToObj(group), 
